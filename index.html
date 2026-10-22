@@ -34,59 +34,73 @@
 
     <h1>EXAMPORT</h1>
     <p>Computer-Based Testing Portal</p>
-    <h
 
     <h2>Welcome, Candidate!</h2>
 
     <p>
         Your journey to success starts here.
-        Enter your details to access your examination.
+        Confirm your details to access your examination.
     </p>
 
     <form id="candidateForm">
         <label for="name">Student Name:</label><br>
         <input type="text" id="name"
-               placeholder="Enter your full name" required>
+               placeholder="Enter your full name" autocomplete="name" required>
         <br><br>
 
-        <label for="examno">Examination Number:</label><br>
-        <input type="text" id="examno"
-               placeholder="Enter examination number" required>
+        <label for="password">Password:</label><br>
+        <input type="password" id="password"
+               placeholder="Enter password" inputmode="numeric"
+               autocomplete="current-password" required>
         <br><br>
 
+        <p id="formMessage" role="alert" aria-live="polite"></p>
         <button type="submit">Proceed to Examination</button>
     </form>
 
     <p>Please ensure your details are correct before proceeding.</p>
+    <p><a href="log.html">Sign in as a different candidate</a></p>
 
     <script>
-        // Collect the candidate's details when the form is submitted, save
-        // them for the examination page, clear any stale result, and continue.
+        const nameInput = document.getElementById("name");
+        const passwordInput = document.getElementById("password");
+        const formMessage = document.getElementById("formMessage");
+
+        // Carry the validated sign-in details into the portal form.
+        nameInput.value = localStorage.getItem("studentName") || "";
+        passwordInput.value = localStorage.getItem("examPassword") || "";
+
+        // Recheck the sign-in rules here in case a candidate edits the details.
         document.getElementById("candidateForm")
             .addEventListener("submit", function(event) {
-
-                // Keep the browser on this page while the form data is handled
-                // by this script instead of performing a normal form request.
                 event.preventDefault();
 
-                // Read both input fields and trim surrounding whitespace so
-                // accidental spaces are not stored as part of the details.
-                const name =
-                    document.getElementById("name").value.trim();
+                const name = nameInput.value.trim();
+                const password = passwordInput.value.trim();
+                const passwordValue = Number(password);
 
-                const examno =
-                    document.getElementById("examno").value.trim();
+                if (!/^[a-e]/i.test(name)) {
+                    formMessage.textContent =
+                        "Name not found or password incorrect.";
+                    nameInput.focus();
+                    return;
+                }
 
-                // localStorage makes the candidate details available to the
-                // examination and results pages after navigation.
+                if (!/^\d+$/.test(password) ||
+                    !Number.isInteger(passwordValue) ||
+                    passwordValue < 1 ||
+                    passwordValue > 1000) {
+                    formMessage.textContent =
+                        "Name not found or password incorrect.";
+                    passwordInput.focus();
+                    return;
+                }
+
+                formMessage.textContent = "";
                 localStorage.setItem("studentName", name);
-                localStorage.setItem("examNumber", examno);
-
-                // Remove the previous attempt's result so it cannot be
-                // mistaken for the result of the new examination.
-               // localStorage.removeItem("examResult");
-
-                // Move the candidate to the page where the questions are shown.
+                localStorage.setItem("examPassword", password);
+                localStorage.removeItem("examNumber");
+                localStorage.removeItem("examResult");
                 window.location.href = "examination.html";
             });
     </script>

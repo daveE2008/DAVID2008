@@ -54,7 +54,6 @@
     <h2>Candidate Details</h2>
 
     <p>Student Name: <strong id="studentName"></strong></p>
-    <p>Examination Number: <strong id="examNumber"></strong></p>
 
     <hr>
 
@@ -76,12 +75,12 @@
         // Load the candidate details and serialized examination result saved
         // by the portal and examination pages.
         const studentName = localStorage.getItem("studentName");
-        const examNumber = localStorage.getItem("examNumber");
+        const examPassword = localStorage.getItem("examPassword");
         const savedResult = localStorage.getItem("examResult");
 
         // Results can only be shown when all required data exists. Otherwise
         // notify the visitor and send them back to the portal to begin.
-        if (!studentName || !examNumber || !savedResult) {
+        if (!studentName || !examPassword || !savedResult) {
             alert("No examination result found. Please take the exam first.");
             window.location.href = "index.html";
         } else {
@@ -94,9 +93,6 @@
             // decimal place for display.
             document.getElementById("studentName").textContent =
                 studentName;
-
-            document.getElementById("examNumber").textContent =
-                examNumber;
 
             document.getElementById("score").textContent =
                 result.score + " / " + result.total;

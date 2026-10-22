@@ -38,7 +38,6 @@
     <h2>Computer-Based Examination</h2>
 
     <p>Student Name: <strong id="studentName"></strong></p>
-    <p>Examination Number: <strong id="examNumber"></strong></p>
 
     <hr>
 
@@ -108,20 +107,17 @@
     <script>
         // Retrieve the candidate details saved by the portal page.
         const studentName = localStorage.getItem("studentName");
-        const examNumber = localStorage.getItem("examNumber");
+        const examPassword = localStorage.getItem("examPassword");
 
       // If either value is missing, return there rather than showing an
         // examination without an identified candidate.  // A candidate must start at the portal page to enter both details.
         
-        if (!studentName || !examNumber) {
+        if (!studentName || !examPassword) {
             window.location.href = "index.html";
         } else {
             // Display the saved details as text rather than interpreting them as HTML.
             document.getElementById("studentName").textContent =
                 studentName;
-
-            document.getElementById("examNumber").textContent =
-                examNumber;
         }
 
         // This answer key is used to mark each response and calculate the
